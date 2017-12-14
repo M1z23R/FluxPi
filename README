@@ -1,7 +1,15 @@
 All scripts are made by FLUXION team.
 I only modified the scripts so people with Raspberry Pi 3 with nexmon drivers from re4son kernel (google re4son kernel for rpi).
 
+Future:
+Everything will be combined in one script.
+Terminal UI
+Generic Page Languages
+Custom Pages
+
 NOTES:
+At the moment FluxPi is using fluxion's generic page in Serbian language.
+If you wish to add new languages please do so, i'll work on english page as soon as i can.
 This was tested on Raspberry Pi 3 - Raspbian Stretch with Desktop.
 Ignore error messages about non existing files and/or folders.
 Make sure you don't delete dump-01.cap file before you successfully crack the key.
