@@ -58,6 +58,7 @@ channel=$2
 	sleep 1
 	chmod +x /tmp/fluxpi/fluxion_captive_portal_dns.py
 	xterm -bg black -fg "#99CCFF" -title "FluxPi AP DNS Service" -e "sudo python /tmp/fluxpi/fluxion_captive_portal_dns.py" &
+	touch /tmp/fluxpi/lighttpd.log
 	lighttpd -f /tmp/fluxpi/lighttpd.conf
 	xterm -bg black -fg "#00CC00" -title "FluxPi Web Service" -e "tail -f \"/tmp/fluxpi/lighttpd.log\"" &
 	sleep 1
