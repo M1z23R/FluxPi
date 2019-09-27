@@ -46,6 +46,9 @@ sudo ./fluxPi.sh HOTSPOT 6
 
 Unfortunately you can't use mdk3 or aircrack-ng while hotspot is enabled because, as i said, nexmon drivers are for monitor mode, original drivers are for AP mode.
 
+// dnsmasq.conf
+except-interface=wlan0
+bind-interfaces
 
 
 
