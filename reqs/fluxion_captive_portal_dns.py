@@ -30,7 +30,7 @@ if __name__ == '__main__':
   print 'pyminifakeDwebconfNS:: dom.query. 60 IN A %s' % ip
 
   udps = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-  udps.bind(('',53))
+  udps.bind(('192.168.254.1',53))
 
   try:
     while 1:
