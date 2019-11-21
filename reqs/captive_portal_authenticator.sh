@@ -9,7 +9,6 @@ echo -n "0"> "/tmp/fluxpi/captive_portal/hit.txt"
 
 # Make console cursor invisible, cnorm to revert.
 tput civis
-clear
 
 m=0
 h=0
@@ -71,7 +70,7 @@ while [ $AuthenticatorState = "running" ]; do
 
 	if [ -f "/tmp/fluxpi/captive_portal/candidate_result.txt" ]; then
 		# Check if we've got the correct password by looking for anything other than "Passphrase not in".
-		if ! aircrack-ng -w "/tmp/fluxpi/captive_portal/candidate.txt" "/tmp/fluxpi/network.cap" | grep -qi "Passphrase not in"; then
+		if ! aircrack-ng -w "/tmp/fluxpi/captive_portal/candidate.txt" "/tmp/fluxpi/network.cap" | grep -qi "KEY NOT FOUND"; then
 			if [ -f /tmp/fluxpi/ip_hits ];then
 				MatchedClientIP=
 
