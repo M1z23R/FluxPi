@@ -9,13 +9,14 @@ Custom Pages
 Script's main use is to be able to use something like fluxion in a single terminal without the need of X desktop.
 It only creates fake captive portal like access point for evil-twin attack, it doesn't deauth anyone.
 It was made for raspberry pi so in order to get it fully working you would need one interface for the AP (script) and another one with monitor mode for deauthing.
-It has only one language (Serbian) so far but you can easily modify the webpages to any language.
-If you wish to modify the webpages you can use following strings that will automatically change:
+It has only two languages (Default English and Serbian) so far but you can easily modify the webpages to any language.
+If you wish to modify or add new webpages you can use following strings that will automatically change:
 
 	%%SSID%%
 	%%CHANNEL%%
 	%%MAC%%
-
+	
+To add a new language just add a new file in the reqs folder like this index_RS.html (change RS to country code u want).
 
 How to use:
 1. Run install.sh
