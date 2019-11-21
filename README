@@ -13,8 +13,8 @@ It has only one language (Serbian) so far but you can easily modify the webpages
 If you wish to modify the webpages you can use following strings that will automatically change:
 
 	%%SSID%%
-  %%CHANNEL%%
-  %%MAC%%
+	%%CHANNEL%%
+	%%MAC%%
 
 
 How to use:
