@@ -1,5 +1,11 @@
 #!/bin/bash
 
+killall dhcpd
+killall lighttpd
+killall hostapd
+kill $(pgrep -f captive_portal_authenticator.sh)
+kill $(pgrep -f fluxion_captive_portal_dns.py)
+	
 while [ "$1" != "" ] && [ "$1" != "--" ]; do
 	case "$1" in
 		-m|--mac) MAC=$2; shift;;
