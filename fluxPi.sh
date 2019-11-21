@@ -90,11 +90,6 @@ wmm_enabled=0
 
 	printf "Starting Captive Portal\n"
 
-	killall -9 lighttpd
-	sleep 1
-	killall -9 dhcpd
-	sleep 1
-	killall -9 hostapd
 
 	sleep 1
 	hostapd -B "/tmp/fluxpi/hostapd.conf" &
