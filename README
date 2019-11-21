@@ -1,5 +1,4 @@
-All scripts are made by FLUXION team.
-I only modified the scripts so people with Raspberry Pi 3 with nexmon drivers from re4son kernel (google re4son kernel for rpi).
+All scripts are made by FLUXION team and only edited by me to suit my needs.
 
 Future:
 Everything will be combined in one script.
@@ -7,50 +6,28 @@ Terminal UI
 Generic Page Languages
 Custom Pages
 
-NOTES:
-At the moment FluxPi is using fluxion's generic page in Serbian language.
-If you wish to add new languages please do so, i'll work on english page as soon as i can.
-This was tested on Raspberry Pi 3 - Raspbian Stretch with Desktop.
-Ignore error messages about non existing files and/or folders.
-Make sure you don't delete dump-01.cap file before you successfully crack the key.
-If i forgot to add any dependencies in the installer script, be kind and post an issue
+Script's main use is to be able to use something like fluxion in a single terminal without the need of X desktop.
+It only creates fake captive portal like access point for evil-twin attack, it doesn't deauth anyone.
+It was made for raspberry pi so in order to get it fully working you would need one interface for the AP (script) and another one with monitor mode for deauthing.
+It has only one language (Serbian) so far but you can easily modify the webpages to any language.
+If you wish to modify the webpages you can use following strings that will automatically change:
+
+	%%SSID%%
+  %%CHANNEL%%
+  %%MAC%%
 
 
 How to use:
-0. First run install.sh to get xterm, hostapd, lighttpd, mdk3, aircrack-ng and isc-dhcp-server
-
-
-1. Enable nexmon drivers:
-sudo /usr/local/src/re4son*/install.sh -x
-
-2. Switch to monitor mode:
-nexutil -m1
-(You need to use -m1 and not -m2)
-
-3. Do a scan with airodump-ng and find a target:
-sudo airodump-ng wlan0
-(Write down ssid, bssid and channel of your target)
-
-4. Run HandshakePi.sh with two arguments - bssid and channel:
-sudo ./HandshakePi.sh xx:xx:xx:xx:xx 6
-
-5. Continue only after you get a message saying .cap files are valid
-
-6. Disable nexmon drivers and revert back to original drivers because those drivers don't support AP mode:
-sudo /usr/local/src/re4son*/install.sh -o
-
-7. Use fluxPi.sh also with two arguments, this time ssid and channel:
-sudo ./fluxPi.sh HOTSPOT 6
-
-8. Wait until someone drops off their password, script will automaticlly shutdown everything and leave a terminal with aircrack-ng information.
-
-Unfortunately you can't use mdk3 or aircrack-ng while hotspot is enabled because, as i said, nexmon drivers are for monitor mode, original drivers are for AP mode.
-
-// dnsmasq.conf
-except-interface=wlan0
-bind-interfaces
+1. Run install.sh
+2. Run script with following argumenst:
+-m Mac address of the fake AP
+-e ESSID of fake AP
+-c Channel of fake AP
+-h Path to verified handshake file
+-i Interface to use for fake AP
 
 
 
-All copyrights if there are any for fluxion, nexmon or re4son are their owns.
-I didn't create any of them, i just used and/or modified them to my needs.
+
+All copyrights if there are any go to fluxion team.
+I am new to github and don't really understand how copyrights work.
