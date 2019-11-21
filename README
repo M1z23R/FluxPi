@@ -31,7 +31,7 @@ Check if the handshake is good using pyrit:
 
 Continue to next step after verifying that at least one GOOD* handshake is present.
 
-2. Run script with following argumenst:
+2. Run fluxPi.sh script with following argumenst:
 -m Mac address of the fake AP
 -e ESSID of fake AP
 -c Channel of fake AP
