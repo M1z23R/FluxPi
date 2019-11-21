@@ -104,7 +104,7 @@ wmm_enabled=0
 	chmod +x /tmp/fluxpi/captive_portal_authenticator.sh
 	/tmp/fluxpi/captive_portal_authenticator.sh &
 	printf "\n"
-	read -p "Press [Enter] key to kill everything..."
+	read -p "Press [Enter] key to kill everything...\n"
 	printf "\n"
 	killall dhcpd
 	killall lighttpd
