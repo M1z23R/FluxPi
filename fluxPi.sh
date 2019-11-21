@@ -7,6 +7,7 @@ while [ "$1" != "" ] && [ "$1" != "--" ]; do
 		-c|--channel) CHANNEL=$2; shift;;
 		-h|--handshake) HANDSHAKE=$2; shift;;
 		-i|--interface) INTERFACE=$2; shift;;
+		-l|--language) LANGUAGE=$2; shift;;
 	esac
 	shift
 done
@@ -14,7 +15,7 @@ done
 shift
 
 if [ "$MAC" == "" ] || [ "$INTERFACE" == "" ] || [ "$ESSID" == "" ] || [ "$CHANNEL" == "" ] || [ "$HANDSHAKE" == "" ]; then
-	printf "You need to provide 5 arguments: -m MAC -e ESSID -c Channel -h 'path to handshake file' -i 'interface to use'.\n\nExample:\n./fluxpi.sh -m 'xx:xx:xx:xx:xx' -e 'AP ESSID' -c '6' -h '/root/network.cap' -i wlan0mon\n"
+	printf "You need to provide 5 arguments: -m MAC -e ESSID -c Channel -l Language (optional) -h 'path to handshake file' -i 'interface to use'.\n\nExample:\n./fluxpi.sh -m 'xx:xx:xx:xx:xx' -e 'AP ESSID' -c '6' -h '/root/network.cap' -l RS -i wlan0mon\n"
 	exit
 fi
 
@@ -42,6 +43,12 @@ wmm_enabled=0
 " > "reqs/hostapd.conf"
 	sleep 1
 	cp -r reqs/* /tmp/fluxpi/
+	if [ "$LANGUAGE" != "" ]; then
+		rm "/tmp/fluxpi/captive_portal/index.html"
+		cp "reqs/captive_portal/index_$LANGUAGE.html" "/tmp/fluxpi/captive_portal/index.html"
+	else
+		mv "/tmp/fluxpi/captive_portal/index_en.html" "/tmp/fluxpi/captive_portal/index.html"
+	fi
 	ip addr add 192.168.254.1/24 dev $INTERFACE
 	cp $HANDSHAKE /tmp/fluxpi/network.cap
 	ssid=$ESSID
@@ -97,7 +104,7 @@ wmm_enabled=0
 	chmod +x /tmp/fluxpi/captive_portal_authenticator.sh
 	/tmp/fluxpi/captive_portal_authenticator.sh &
 	printf "\n"
-	read -p "Press [Enter] key to start backup..."
+	read -p "Press [Enter] key to kill everything..."
 	printf "\n"
 	killall dhcpd
 	killall lighttpd
